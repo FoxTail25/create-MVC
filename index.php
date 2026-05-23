@@ -21,3 +21,7 @@ $track  = $router->getTrack(
     $routes,
     $_SERVER['REQUEST_URI']
 );
+// Создаём экзепляр диспатчера
+$dispatcher = new Dispatcher();
+// Вызов диспетчера:
+$page  = $dispatcher->getPage($track);
