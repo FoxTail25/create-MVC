@@ -4,10 +4,10 @@ namespace Core;
 
 class Controller
 {
-    protected string $layout = 'default';
-    protected string $title = 'MVC-framework';
+    public string $title = 'MVC-framework';
+    public string $layout = 'default';
 
-    protected function render(string $view, array $data)
+    protected function render(string $view, array $data = [])
     {
         return new Page($this->layout, $this->title, $view, $data);
     }

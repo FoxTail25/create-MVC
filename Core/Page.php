@@ -6,10 +6,10 @@ class Page
 {
     private string $layout;
     private string $title;
-    private string $view;
+    private string|null $view;
     private array $data;
 
-    public function __construct(string $layout, string $title = '', string|null $view = null, array $data = [])
+    public function __construct(string $layout, string $title = '', $view = null, array $data = [])
     {
         $this->layout = $layout;
         $this->title  = $title;
