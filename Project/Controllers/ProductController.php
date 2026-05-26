@@ -1,0 +1,38 @@
+<?php
+
+namespace Project\Controllers;
+
+use Core\Controller;
+use Project\Models\ProductModel;
+
+class ProductController extends Controller
+{
+    public function all()
+    {
+        $data = (new ProductModel)->all();
+
+
+        if ($data['success']) {
+            $this->title = 'all product';
+            return $this->render('product/all', ['products' => $data['msg']]);
+        } else {
+            echo 'Не удалось получить данные из BD';
+        }
+    }
+    public function product($params)
+    {
+        $productId = $params['id'];
+        $data = (new ProductModel)->productById($productId);
+
+        if ($data['success']) {
+            if (count($data['msg']) > 0) {
+                $this->title = $data['msg'][0]['name'];
+                return $this->render('product/product', ['product' => $data['msg'][0]]);
+            } else {
+                return $this->render('errors/404');
+            }
+        } else {
+            echo 'Не удалось получить данные из BD';
+        }
+    }
+}

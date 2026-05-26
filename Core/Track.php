@@ -10,9 +10,9 @@ class Track
 {
     private string $controller; // Имя контроллера который обрабатывает путь
     private string $action; // Имя метода контроллера который обрабатывает путь
-    private array $params; // Именованный массив, передаваемый в представление. В котором в качестве ключа указывается имя переменной, а в качестве свойства содержание этой переменной.
+    private array|null $params; // Именованный массив, передаваемый в представление. В котором в качестве ключа указывается имя переменной, а в качестве свойства содержание этой переменной.
 
-    public function __construct(string $controller, string $action, array $params = null)
+    public function __construct(string $controller, string $action, array|null $params = null)
     {
         $this->controller = $controller;
         $this->action = $action;
