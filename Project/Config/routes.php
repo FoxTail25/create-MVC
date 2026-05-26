@@ -12,4 +12,5 @@ return [
     В качестве примера указан путь "/", контроллер "index" и метод контроллера "index" - "home"
     */
     new Route('/', 'index', 'home'),
+    new Route('/test', 'test', 'modelTest'),
 ];
