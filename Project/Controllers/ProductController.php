@@ -9,7 +9,7 @@ class ProductController extends Controller
 {
     public function all()
     {
-        $data = (new ProductModel)->all();
+        $data = (new ProductModel)->all(); // Получаем данные из БД.
 
 
         if ($data['success']) {
@@ -25,10 +25,10 @@ class ProductController extends Controller
         $data = (new ProductModel)->productById($productId);
 
         if ($data['success']) {
-            if (count($data['msg']) > 0) {
+            if (count($data['msg']) > 0) { // Если проверка на наличие данных. Если они есть то....
                 $this->title = $data['msg'][0]['name'];
                 return $this->render('product/product', ['product' => $data['msg'][0]]);
-            } else {
+            } else { // Если данных нет то....
                 return $this->render('errors/noproduct');
             }
         } else {
