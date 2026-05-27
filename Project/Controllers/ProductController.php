@@ -19,7 +19,7 @@ class ProductController extends Controller
             echo 'Не удалось получить данные из BD';
         }
     }
-    public function product($params)
+    public function product(mixed $params)
     {
         $productId = $params['id'];
         $data = (new ProductModel)->productById($productId);
@@ -29,7 +29,7 @@ class ProductController extends Controller
                 $this->title = $data['msg'][0]['name'];
                 return $this->render('product/product', ['product' => $data['msg'][0]]);
             } else {
-                return $this->render('errors/404');
+                return $this->render('errors/noproduct');
             }
         } else {
             echo 'Не удалось получить данные из BD';
