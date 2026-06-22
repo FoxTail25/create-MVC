@@ -34,7 +34,7 @@ class Model
                 self::$pdo = new PDO(self::$dsn, DB_USER, DB_PASS, self::$opt);
                 self::$connectTest = 'База данных подключена';
             } catch (PDOException $e) {
-                self::$connectTest = 'Возникла ошибка при подключении: . $e->getMessage()';
+                self::$connectTest = 'Возникла ошибка при подключении:' . $e->getMessage();
             }
         }
     }
@@ -82,7 +82,7 @@ class Model
 
     /* функция изменения записи в базе данных
     функция принимает в качестве параметров строку запроса типа: 'UPDATE users SET name = :name, age = :age WHERE id = :id'
-    Именованный массив типа: ['id' = 1, 'name' => 'alex', 'age' => 25;] Ключами в таком массиве будут имена переменных из SQL-запроса. 
+    Именованный массив типа: ['id' => 1, 'name' => 'alex', 'age' => 25;] Ключами в таком массиве будут имена переменных из SQL-запроса. 
     */
     protected function update(string $sqlQueryString, array $variablesArray = [])
     {
@@ -103,7 +103,7 @@ class Model
 
     /* функция удаления записи в базе данных
     функция принимает в качестве параметров строку запроса типа: 'DELETE FROM users WHERE id = :id'
-    Именованный массив типа: ['id' = 10] Ключами в таком массиве будут имена переменных из SQL-запроса. 
+    Именованный массив типа: ['id' => 10] Ключами в таком массиве будут имена переменных из SQL-запроса. 
     */
     protected function delete(string $sqlQueryString, array $variablesArray = [])
     {
