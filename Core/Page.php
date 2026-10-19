@@ -1,18 +1,18 @@
 <?php
 
 namespace Core;
-/*
-Класс Page содержит данные необходимы для формирования страницы. 
-*/
 
+/**
+ * Класс Page содержит данные, необходимые для формирования страницы. 
+ */
 class Page
 {
     private string $layout;
     private string $title;
-    private string|null $view;
+    private ?string $view; // Краткая запись для string|null
     private array $data;
 
-    public function __construct(string $layout, string $title = '', $view = null, array $data = [])
+    public function __construct(string $layout, string $title = '', ?string $view = null, array $data = [])
     {
         $this->layout = $layout;
         $this->title  = $title;
@@ -20,8 +20,15 @@ class Page
         $this->data   = $data;
     }
 
-    public function __get(string $property)
+    /**
+     * Магический метод для безопасного чтения приватных свойств (Read-Only)
+     */
+    public function &__get(string $property)
     {
-        return $this->$property;
+        if (property_exists($this, $property)) {
+            return $this->$property;
+        }
+
+        throw new \Exception("Свойство '{$property}' не существует в классе " . __CLASS__);
     }
 }

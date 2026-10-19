@@ -6,9 +6,14 @@ use Core\Controller;
 
 class ErrorController extends Controller
 {
-    public function notFound()
+    /**
+     * Экшен для отображения 404 ошибки
+     * Переменная $message автоматически прокинется из параметров трека
+     */
+    public function notFound($message = 'Страница не найдена')
     {
-        $this->layout = '404';
-        return $this->render('errors/404');
+        return $this->render('Ошибка 404', 'error/notFound', [
+            'message' => $message
+        ]);
     }
 }

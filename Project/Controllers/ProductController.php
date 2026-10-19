@@ -7,32 +7,46 @@ use Project\Models\ProductModel;
 
 class ProductController extends Controller
 {
-    public function all()
+    /**
+     * Отображает каталог всех товаров
+     * Роут: /product/all
+     */
+    public function all(): \Core\Page
     {
-        $data = (new ProductModel)->all(); // Получаем данные из БД.
+        $productModel = new ProductModel();
+        
+        // ORM-метод read() без аргументов выберет абсолютно все записи из таблицы products
+        $products = $productModel->read();
 
-
-        if ($data['success']) {
-            $this->title = 'all product';
-            return $this->render('product/all', ['products' => $data['msg']]);
-        } else {
-            echo 'Не удалось получить данные из BD';
-        }
+        // Передаем заголовок вкладки, имя файла вьюшки и массив с переменными
+        return $this->render('Каталог товаров', 'product/all', [
+            'products' => $products
+        ]);
     }
-    public function product(mixed $params)
-    {
-        $productId = $params['id'];
-        $data = (new ProductModel)->productById($productId);
 
-        if ($data['success']) {
-            if (count($data['msg']) > 0) { // Если проверка на наличие данных. Если они есть то....
-                $this->title = $data['msg'][0]['name'];
-                return $this->render('product/product', ['product' => $data['msg'][0]]);
-            } else { // Если данных нет то....
-                return $this->render('errors/noproduct');
-            }
-        } else {
-            echo 'Не удалось получить данные из BD';
+    /**
+     * Отображает карточку конкретного товара
+     * Роут: /product/:id
+     */
+    public function product($id): \Core\Page
+    {
+        $productModel = new ProductModel();
+        
+        // Ищем товар по ID. Диспетчер сам привел параметр из URI в переменную $id
+        $result = $productModel->read(['id' => $id]);
+
+        // Так как метод read() всегда возвращает массив массивов (даже если найдена 1 строка),
+        // проверяем, нашлось ли что-то в базе данных
+        if (empty($result)) {
+            // Выбрасываем 404 ошибку, которую перехватит наш глобальный try...catch в index.php
+            throw new \Exception("Товар с ID {$id} не найден в каталоге.", 404);
         }
+
+        // Берем самый первый (и единственный) элемент из результатов поиска
+        $product = $result[0];
+
+        return $this->render($product['title'], 'product/view', [
+            'product' => $product
+        ]);
     }
 }

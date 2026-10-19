@@ -1,19 +1,25 @@
 <?php
 
 namespace Core;
-/*
-Класс контроллер формирует данные, для ответа на запрос пользователя.
-В качестве ответа, выступает экземпляр класс Page, который содержит в своих свойствах layout, title, путь к необходимому экземпляру класса View. А также может содеражать именнованный массив с данными, которые будут отражены в представлении (View).
-*/
 
-class Controller
+/**
+ * Базовый класс Контроллер формирует данные для ответа на запрос пользователя.
+ */
+abstract class Controller
 {
-    // Данные "по умолчанию" для layout и title
-    public string $title = 'MVC-framework';
-    public string $layout = 'default';
+    // Значения по умолчанию для шаблона (layout) и заголовка (title)
+    protected string $layout = 'default';
+    protected string $defaultTitle = 'MVC-framework';
 
-    protected function render(string $view, array $data = [])
+    /**
+     * Вспомогательный метод для быстрой генерации объекта страницы.
+     * Передаем заголовок, имя вьюшки и данные одной строкой.
+     */
+    protected function render(string $title, string $view = '', array $data = []): Page
     {
-        return new Page($this->layout, $this->title, $view, $data);
+        // Если заголовок не передан, используем дефолтный
+        $pageTitle = !empty($title) ? $title : $this->defaultTitle;
+        
+        return new Page($this->layout, $pageTitle, $view, $data);
     }
 }

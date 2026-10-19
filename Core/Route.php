@@ -1,15 +1,15 @@
 <?php
 
 namespace Core;
-/*
-Класс Route служит для хранения маршрутов нашего фреймворка
-*/
 
+/**
+ * Класс Route служит для хранения маршрутов нашего фреймворка
+ */
 class Route
 {
-    private string $path; // Обрабатываемый путь
-    private string $controller; // Имя контроллера который обрабатывает путь
-    private string $action; // Имя метода контроллера который обрабатывает путь
+    private string $path;       // Обрабатываемый путь
+    private string $controller; // Имя контроллера, который обрабатывает путь
+    private string $action;     // Имя метода контроллера, который обрабатывает путь
 
     public function __construct(string $path, string $controller, string $action)
     {
@@ -17,8 +17,16 @@ class Route
         $this->controller = $controller;
         $this->action = $action;
     }
+
+    /**
+     * Магический метод для безопасного чтения приватных свойств (Read-Only)
+     */
     public function __get(string $property)
     {
-        return $this->$property;
+        if (property_exists($this, $property)) {
+            return $this->$property;
+        }
+        
+        throw new \Exception("Свойство '{$property}' не существует в классе " . __CLASS__);
     }
 }

@@ -9,10 +9,20 @@
 </head>
 
 <body>
-    <div class="content">
-        <?= isset($content) ? $content : ''; ?>
-    </div>
-    <script src="/project/webroot/js/hello.js"></script>
-</body>
 
+<header>
+    <h1>Мой Самописный PHP MVC-Фреймворк</h1>
+</header>
+
+<nav>
+    <a href="/">Главная</a>
+    <a href="/product/all">Каталог товаров</a>
+</nav>
+
+<div class="container">
+    <!-- Сюда наш движок View автоматически подставит контент вьюшки -->
+    <?= $content ?>
+</div>
+
+</body>
 </html>
