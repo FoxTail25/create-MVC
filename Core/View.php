@@ -2,56 +2,53 @@
 
 namespace Core;
 
-/*
-	Класс View (представление), формирует финальный облик страницы, которая будет возвращена пользователю по его запросу.
-	*/
-
 class View
 {
-	/*
-	Возвращаем готовую для отображения страницу
-	*/
-	public function render(Page $page)
-	{
-		return $this->renderLayout($page, $this->renderView($page));
-	}
+    /**
+     * Формирует финальный HTML-код страницы, объединяя Layout и View.
+     */
+    public function render(Page $page): string
+    {
+        return $this->renderLayout($page, $this->renderView($page));
+    }
 
-	/*
-	Вставляем представление (View), "внутрь" Layout
-	*/
-	private function renderLayout(Page $page, $content)
-	{
-		$layoutPath = $_SERVER['DOCUMENT_ROOT'] . "/project/layouts/{$page->layout}.php";
+    /**
+     * Вставляет готовый контент представления внутрь главного шаблона (Layout).
+     */
+    private function renderLayout(Page $page, string $content): string
+    {
+        // Используем константу ROOT и соблюдаем правильный регистр папок (Project/Layouts)
+        $layoutPath = ROOT . "/Project/Layouts/{$page->layout}.php";
 
-		if (file_exists($layoutPath)) {
-			ob_start();
-			$title = $page->title;
-			include $layoutPath;
-			return ob_get_clean();
-		} else {
-			echo "Layout file not found at path $layoutPath";
-			die();
-		}
-	}
+        if (!file_exists($layoutPath)) {
+            throw new \Exception("Файл шаблона (Layout) не найден по пути: $layoutPath", 500);
+        }
 
-	/*
-	Вставляем данные, "внутрь" предствления (View).
-	*/
-	private function renderView(Page $page)
-	{
-		if ($page->view) {
-			$viewPath = $_SERVER['DOCUMENT_ROOT'] . "/project/views/{$page->view}.php";
+        ob_start();
+        $title = $page->title; // Переменная $title становится доступна внутри layout.php
+        include $layoutPath;
+        return ob_get_clean();
+    }
 
-			if (file_exists($viewPath)) {
-				ob_start();
-				$data = $page->data;
-				extract($data);
-				include $viewPath;
-				return ob_get_clean();
-			} else {
-				echo "View file not found at path $viewPath";
-				die();
-			}
-		}
-	}
+    /**
+     * Рендерит внутреннее представление (View) страницы и наполняет его данными.
+     */
+    private function renderView(Page $page): string
+    {
+        if (!$page->view) {
+            return '';
+        }
+
+        // Соблюдаем правильный регистр папок (Project/Views)
+        $viewPath = ROOT . "/Project/Views/{$page->view}.php";
+
+        if (!file_exists($viewPath)) {
+            throw new \Exception("Файл отображения (View) не найден по пути: $viewPath", 500);
+        }
+
+        ob_start();
+        extract($page->data); // Превращает ['products' => $list] в переменную $products внутри view.php
+        include $viewPath;
+        return ob_get_clean();
+    }
 }
