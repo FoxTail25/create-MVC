@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
 // Определяем базовую директорию проекта
-define('ROOT', __DIR__);
+define('ROOT', dirname(__DIR__));
 
 // Автозагрузчик классов (PSR-4)
 spl_autoload_register(function ($class) {
